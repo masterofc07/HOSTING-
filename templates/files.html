@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Files — {{ server_name }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+<style>
+:root{--g1:#fcd34d;--g2:#fbbf24;--g3:#d97706;--b1:#0a0a0f;--b2:#14141c;--t1:#fff8e7;--t2:#c4a86b;--t3:#786740;--line:rgba(251,191,36,.18);--lineS:rgba(251,191,36,.55);--grad:linear-gradient(135deg,#fcd34d,#fbbf24 50%,#d97706)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0a0a0f;color:#fff8e7;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{background:#14141c;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+header h1{font-family:Orbitron,sans-serif;font-size:14px;color:#fbbf24;letter-spacing:1.5px;display:flex;align-items:center;gap:10px}
+header h1 i{font-size:15px}
+.btn{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.4);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.btn:hover{background:#fbbf24;color:#1a1408}
+.btn.danger{background:rgba(251,113,133,.1);color:#fb7185;border-color:rgba(251,113,133,.4)}
+.btn.danger:hover{background:#fb7185;color:#fff}
+.btn.green{background:rgba(74,222,128,.1);color:#4ade80;border-color:rgba(74,222,128,.4)}
+.btn.green:hover{background:#4ade80;color:#0a0a0f}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:280px;background:#0f0f17;border-right:1px solid var(--line);overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:4px}
+.sidebar-head{display:flex;gap:5px;padding:4px;margin-bottom:8px}
+.sidebar-head .btn{flex:1;font-size:11px;padding:7px 4px;justify-content:center}
+.file-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:12.5px;color:#c4a86b;transition:.15s}
+.file-item:hover{background:rgba(251,191,36,.1);color:#fbbf24}
+.file-item.active{background:rgba(251,191,36,.2);color:#fcd34d}
+.file-item i{font-size:12px;width:14px}
+.file-item .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-item .size{font-size:9.5px;opacity:.6;font-family:monospace}
+.file-item[data-dir="1"] i{color:#fbbf24}
+.editor-area{flex:1;display:flex;flex-direction:column;min-width:0}
+.toolbar{padding:8px 14px;background:#14141c;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.filename{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#c4a86b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40vw}
+.toolbar-right{display:flex;gap:6px;align-items:center}
+.status{font-size:11px;color:#4ade80;font-weight:600}
+#editor{flex:1;min-height:0}
+.empty-editor{flex:1;display:grid;place-items:center;color:#786740;text-align:center;padding:20px;background:#0a0a0f}
+.empty-editor i{font-size:3rem;opacity:.3;display:block;margin-bottom:14px}
+.empty-editor p{font-size:14px;color:#c4a86b}
+.empty-editor small{font-size:11px;display:block;margin-top:6px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal-box{background:#14141c;border:1px solid var(--lineS);border-radius:16px;padding:24px;width:100%;max-width:400px}
+.modal-box h3{color:#fbbf24;margin-bottom:16px;font-size:15px}
+.modal-box input,.modal-box select{width:100%;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:8px;color:#fff8e7;font-family:inherit;font-size:13px;margin-bottom:12px}
+.modal-box input:focus{outline:none;border-color:#fbbf24}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+@media(max-width:640px){
+  .sidebar{position:absolute;left:0;top:0;bottom:0;z-index:500;transform:translateX(-100%);transition:.3s;width:260px;padding-top:60px}
+  .sidebar.open{transform:translateX(0);box-shadow:10px 0 40px rgba(0,0,0,.7)}
+  .filename{max-width:50vw;font-size:11px}
+  .toolbar .btn{padding:6px 10px;font-size:11px}
+  header h1{font-size:12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><i class="fa-solid fa-folder-tree"></i> {{ server_name }}</h1>
+  <div style="display:flex;gap:8px;">
+    <button class="btn" onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+    <a href="/" class="btn"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+    <a href="/api/file/download-zip/{{ server_name }}" class="btn green"><i class="fa-solid fa-download"></i> ZIP</a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <button class="btn" onclick="openNew(false)"><i class="fa-solid fa-file-plus"></i> File</button>
+      <button class="btn" onclick="openNew(true)"><i class="fa-solid fa-folder-plus"></i> Folder</button>
+      <button class="btn" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-upload"></i></button>
+    </div>
+    <input type="file" id="fileInput" style="display:none" onchange="uploadFile(event)">
+    {% for f in files %}
+    <div class="file-item" data-path="{{ f.rel }}" data-editable="{{ '1' if f.editable else '0' }}" data-dir="{{ '1' if f.is_dir else '0' }}" style="{{ 'padding-left:20px' if '/' in f.rel else '' }}">
+      <i class="fa-solid {{ 'fa-folder' if f.is_dir else ('fa-file-code' if f.editable else 'fa-file') }}"></i>
+      <span class="name">{{ f.name }}</span>
+      {% if not f.is_dir %}<span class="size">{{ (f.size/1024)|round(1) }}K</span>{% endif %}
+    </div>
+    {% endfor %}
+    {% if not files %}<div style="padding:20px;text-align:center;color:#786740;font-size:12px;">Koi file nahi. Upload karo ya banao.</div>{% endif %}
+  </aside>
+
+  <div class="editor-area">
+    <div class="toolbar">
+      <span class="filename" id="filename">— file select karo —</span>
+      <div class="toolbar-right">
+        <span class="status" id="status"></span>
+        <button class="btn green" id="saveBtn" onclick="saveFile()" disabled><i class="fa-solid fa-save"></i> Save</button>
+        <button class="btn danger" id="delBtn" onclick="deleteFile()" disabled><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <div id="editorWrap" style="flex:1;display:flex;">
+      <div class="empty-editor" id="emptyState">
+        <div>
+          <i class="fa-solid fa-code"></i>
+          <p>File select karo left panel se</p>
+          <small>Ya nayi file banao / upload karo</small>
+        </div>
+      </div>
+      <div id="editor" style="display:none;width:100%;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="newModal">
+  <div class="modal-box">
+    <h3 id="newTitle">New File</h3>
+    <input type="text" id="newName" placeholder="filename.py">
+    <div class="modal-btns">
+      <button class="btn" onclick="document.getElementById('newModal').classList.remove('show')">Cancel</button>
+      <button class="btn green" onclick="createEntry()">Create</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let editor, currentPath = null, originalContent = '', isNewDir = false;
+const serverName = "{{ server_name }}";
+
+// mobile menu button
+if (window.innerWidth <= 640) document.getElementById('menuBtn').style.display = 'inline-flex';
+
+require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+require(['vs/editor/editor.main'], () => {
+  editor = monaco.editor.create(document.getElementById('editor'), {
+    value: '', language: 'plaintext', theme: 'vs-dark', fontSize: 13.5,
+    automaticLayout: true, minimap: { enabled: false },
+    scrollBeyondLastLine: false, wordWrap: 'on'
+  });
+  editor.onDidChangeModelContent(() => {
+    const dirty = editor.getValue() !== originalContent;
+    document.getElementById('status').textContent = dirty ? '● Unsaved' : '✓ Saved';
+    document.getElementById('status').style.color = dirty ? '#fbbf24' : '#4ade80';
+  });
+});
+
+function langFromPath(p) {
+  const e = (p.split('.').pop() || '').toLowerCase();
+  return ({
+    py:'python', js:'javascript', mjs:'javascript', ts:'typescript',
+    jsx:'javascript', tsx:'typescript', html:'html', htm:'html',
+    css:'css', scss:'scss', json:'json', md:'markdown', txt:'plaintext',
+    yml:'yaml', yaml:'yaml', sh:'shell', bash:'shell', php:'php',
+    xml:'xml', sql:'sql', csv:'plaintext', ini:'ini', toml:'ini',
+    rb:'ruby', go:'go', rs:'rust', java:'java', c:'c', cpp:'cpp',
+    h:'c', lua:'lua', pl:'perl', r:'r', swift:'swift', env:'plaintext',
+    conf:'ini', cfg:'ini', log:'plaintext'
+  })[e] || 'plaintext';
+}
+
+document.querySelectorAll('.file-item').forEach(el => {
+  el.addEventListener('click', async () => {
+    if (el.dataset.dir === '1') return;
+    if (el.dataset.editable !== '1') {
+      if (confirm('Ye file editable nahi. Download karein?')) {
+        window.location.href = `/api/file/download/${serverName}/${encodeURI(el.dataset.path)}`;
+      }
+      return;
+    }
+    document.querySelectorAll('.file-item').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('sidebar').classList.remove('open');
+    const r = await fetch(`/api/file/read/${serverName}/${encodeURI(el.dataset.path)}`);
+    const d = await r.json();
+    if (d.error) return alert(d.error);
+    currentPath = el.dataset.path;
+    originalContent = d.content;
+    document.getElementById('filename').textContent = currentPath;
+    document.getElementById('saveBtn').disabled = false;
+    document.getElementById('delBtn').disabled = false;
+    document.getElementById('status').textContent = '✓ Loaded';
+    document.getElementById('status').style.color = '#4ade80';
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('editor').style.display = 'block';
+    if (editor) {
+      monaco.editor.setModelLanguage(editor.getModel(), langFromPath(currentPath));
+      editor.setValue(d.content);
+    }
+  });
+});
+
+async function saveFile() {
+  if (!currentPath) return;
+  const r = await fetch(`/api/file/save/${serverName}/${encodeURI(currentPath)}`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ content: editor.getValue() })
+  });
+  const d = await r.json();
+  if (d.success) {
+    originalContent = editor.getValue();
+    document.getElementById('status').textContent = '✓ Saved';
+    document.getElementById('status').style.color = '#4ade80';
+  } else alert(d.error);
+}
+
+async function deleteFile() {
+  if (!currentPath || !confirm(`Delete ${currentPath}?`)) return;
+  const r = await fetch(`/api/file/delete/${serverName}/${encodeURI(currentPath)}`, {method:'POST'});
+  if (r.ok) location.reload();
+}
+
+function openNew(isDir) {
+  isNewDir = isDir;
+  document.getElementById('newTitle').textContent = isDir ? 'New Folder' : 'New File';
+  document.getElementById('newName').placeholder = isDir ? 'folder_name' : 'filename.py';
+  document.getElementById('newName').value = '';
+  document.getElementById('newModal').classList.add('show');
+  setTimeout(() => document.getElementById('newName').focus(), 100);
+}
+
+async function createEntry() {
+  const name = document.getElementById('newName').value.trim();
+  if (!name) return;
+  const r = await fetch(`/api/file/new/${serverName}`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ name, is_dir: isNewDir })
+  });
+  const d = await r.json();
+  if (d.success) location.reload();
+  else alert(d.error);
+}
+
+async function uploadFile(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const fd = new FormData();
+  fd.append('file', f);
+  const r = await fetch(`/api/file/upload/${serverName}`, {method:'POST', body: fd});
+  const d = await r.json();
+  if (d.success) location.reload();
+  else alert(d.error);
+}
+
+// Ctrl+S to save
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    if (currentPath) saveFile();
+  }
+});
+</script>
+</body>
+</html>

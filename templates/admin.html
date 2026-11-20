@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — MASTER HOSTING</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Cinzel:wght@700;900&family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root{--g1:#fcd34d;--g2:#fbbf24;--g3:#d97706;--b1:#0a0a0f;--b2:#14141c;--t1:#fff8e7;--t2:#c4a86b;--t3:#786740;--line:rgba(251,191,36,.18);--lineS:rgba(251,191,36,.55);--ok:#4ade80;--err:#fb7185;--grad:linear-gradient(135deg,#fcd34d,#fbbf24 50%,#d97706)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0a0a0f;color:#fff8e7;font-size:13.5px;min-height:100dvh;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(251,191,36,.08),transparent 60%),#0a0a0f}
+.header{background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
+.logo-wrap{display:flex;align-items:center;gap:14px}
+.logo-mark{width:44px;height:44px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-size:20px;color:#1a1408;box-shadow:0 0 20px rgba(251,191,36,.35)}
+.logo-text h1{font-family:Cinzel,serif;font-size:20px;font-weight:900;letter-spacing:1px;background:linear-gradient(135deg,#fff8e7,#fbbf24);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.logo-text small{font-family:Orbitron,sans-serif;font-size:8px;color:#d97706;letter-spacing:3px;display:block;margin-top:3px;font-weight:700}
+.user-info{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid var(--lineS);border-radius:20px;font-size:12px;font-weight:700;text-decoration:none}
+.chip:hover{background:#fbbf24;color:#1a1408}
+.chip.red{background:rgba(251,113,133,.1);color:#fb7185;border-color:rgba(251,113,133,.3)}
+.chip.red:hover{background:#fb7185;color:#fff}
+.container{max-width:1300px;margin:0 auto;padding:24px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.stat{background:linear-gradient(160deg,rgba(35,28,15,.85),rgba(15,12,6,.92));border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:.7}
+.stat i{font-size:1.8rem;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block}
+.stat h3{font-family:Orbitron,sans-serif;font-size:1.8rem;color:#fcd34d;margin-bottom:4px}
+.stat p{font-size:11px;color:#c4a86b;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+.card{background:linear-gradient(160deg,rgba(35,28,15,.85),rgba(15,12,6,.92));border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:20px}
+.title{font-family:Orbitron,sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#fbbf24;margin-bottom:20px;display:flex;align-items:center;gap:10px;text-transform:uppercase}
+.title .cnt{margin-left:auto;font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid var(--lineS)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px}
+.form-group label{color:#c4a86b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;display:block;margin-bottom:6px}
+.form-control{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#fff8e7;font-family:inherit;font-size:14px}
+.form-control:focus{outline:none;border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.12)}
+.btn{background:var(--grad);color:#1a1408;border:none;padding:12px 20px;border-radius:12px;font-weight:800;font-size:13px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:.2s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,191,36,.3)}
+.btn.sm{padding:7px 12px;font-size:11px;letter-spacing:.5px}
+.btn.red{background:rgba(251,113,133,.15);color:#fb7185;border:1px solid rgba(251,113,133,.4)}
+.btn.red:hover{background:#fb7185;color:#fff}
+.btn.blue{background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.4)}
+.btn.blue:hover{background:#60a5fa;color:#0a0a0f}
+.btn.green{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.4)}
+.btn.green:hover{background:#4ade80;color:#0a0a0f}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid rgba(251,191,36,.1)}
+th{color:#c4a86b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+td{color:#fff8e7}
+.pill{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;display:inline-block}
+.pill.on{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.pill.off{background:rgba(251,113,133,.15);color:#fb7185;border:1px solid rgba(251,113,133,.3)}
+.pill.admin{background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4)}
+.actions{display:flex;gap:5px;flex-wrap:wrap}
+.empty{text-align:center;padding:30px;color:#786740}
+.flash{padding:12px 16px;border-radius:10px;margin-bottom:18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px}
+.flash.success{background:rgba(74,222,128,.12);color:#4ade80;border-left:4px solid #4ade80}
+.flash.error{background:rgba(251,113,133,.12);color:#fb7185;border-left:4px solid #fb7185}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);padding:12px 20px;border-radius:12px;background:rgba(20,20,28,.98);color:#fff8e7;font-size:13px;font-weight:600;border:1px solid var(--lineS);opacity:0;pointer-events:none;transition:.3s;z-index:3000;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(74,222,128,.4)}
+.toast.error{border-color:rgba(251,113,133,.4)}
+@media(max-width:640px){.container{padding:14px}.header{padding:12px 14px}.stat h3{font-size:1.4rem}table{font-size:11px}th,td{padding:8px 6px}.hide-mob{display:none}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo-wrap">
+    <div class="logo-mark"><i class="fa-solid fa-shield-halved"></i></div>
+    <div class="logo-text">
+      <h1>ADMIN PANEL</h1>
+      <small>MASTER HOSTING</small>
+    </div>
+  </div>
+  <div class="user-info">
+    <a href="/" class="chip"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a href="/logout" class="chip red"><i class="fa-solid fa-power-off"></i> Logout</a>
+  </div>
+</header>
+
+<div class="container">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for c,m in msgs %}
+      <div class="flash {{ c }}"><i class="fa-solid fa-circle-check"></i> {{ m }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="stats">
+    <div class="stat"><i class="fa-solid fa-users"></i><h3>{{ total_users }}</h3><p>Total Users</p></div>
+    <div class="stat"><i class="fa-solid fa-server"></i><h3>{{ total_servers }}</h3><p>Total Servers</p></div>
+    <div class="stat"><i class="fa-solid fa-play-circle"></i><h3>{{ total_running }}</h3><p>Running Now</p></div>
+    <div class="stat"><i class="fa-solid fa-crown"></i><h3>ADMIN</h3><p>Full Control</p></div>
+  </div>
+
+  <div class="card">
+    <h2 class="title"><i class="fa-solid fa-user-plus"></i> Create New User</h2>
+    <form method="POST" action="/admin/create_user">
+      <div class="form-grid">
+        <div class="form-group"><label>Username</label><input class="form-control" name="username" required minlength="3" placeholder="rahul"></div>
+        <div class="form-group"><label>Password</label><input class="form-control" name="password" type="password" required minlength="4" placeholder="min 4 chars"></div>
+        <div class="form-group"><label>Server Limit</label><input class="form-control" name="server_limit" type="number" value="5" min="-1"><small style="color:#786740;font-size:10px">-1 = unlimited</small></div>
+      </div>
+      <button class="btn" type="submit"><i class="fa-solid fa-plus"></i> Create User</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2 class="title"><i class="fa-solid fa-users"></i> All Users <span class="cnt">{{ total_users }}</span></h2>
+    {% if users %}
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Limit</th><th class="hide-mob">Created</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for uname, u in users.items() %}
+        <tr>
+          <td><b style="color:#fcd34d">{{ uname }}</b></td>
+          <td>{% if u.is_admin %}<span class="pill admin">ADMIN</span>{% else %}<span class="pill on">USER</span>{% endif %}</td>
+          <td>{% if u.active %}<span class="pill on">ACTIVE</span>{% else %}<span class="pill off">BLOCKED</span>{% endif %}</td>
+          <td>{{ '∞' if u.server_limit == -1 else u.server_limit }}</td>
+          <td class="hide-mob" style="font-size:11px;color:#786740">{{ u.created_at[:10] }}</td>
+          <td>
+            <div class="actions">
+              {% if not u.is_admin %}
+              <button class="btn sm {{ 'red' if u.active else 'green' }}" onclick="toggleUser('{{ uname }}')">
+                <i class="fa-solid fa-{{ 'ban' if u.active else 'check' }}"></i>
+              </button>
+              {% endif %}
+              <button class="btn sm blue" onclick="resetPw('{{ uname }}')"><i class="fa-solid fa-key"></i></button>
+              <button class="btn sm green" onclick="setLimit('{{ uname }}')"><i class="fa-solid fa-sliders"></i></button>
+              <button class="btn sm" onclick="viewServers('{{ uname }}')"><i class="fa-solid fa-server"></i></button>
+              {% if not u.is_admin %}
+              <button class="btn sm red" onclick="delUser('{{ uname }}')"><i class="fa-solid fa-trash"></i></button>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div class="empty">Koi user nahi. Upar se banao.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2 class="title"><i class="fa-solid fa-server"></i> All Servers <span class="cnt">{{ total_servers }}</span></h2>
+    {% if all_servers %}
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>User</th><th>Server</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for s in all_servers %}
+        <tr>
+          <td style="color:#c4a86b">{{ s.user }}</td>
+          <td><b style="color:#fcd34d">{{ s.server }}</b></td>
+          <td>{% if s.running %}<span class="pill on">RUNNING</span>{% else %}<span class="pill off">STOPPED</span>{% endif %}</td>
+          <td>
+            <div class="actions">
+              {% if s.running %}
+              <button class="btn sm red" onclick="adminStop('{{ s.user }}','{{ s.server }}')"><i class="fa-solid fa-stop"></i> Stop</button>
+              {% else %}
+              <button class="btn sm green" onclick="adminStart('{{ s.user }}','{{ s.server }}')"><i class="fa-solid fa-play"></i> Start</button>
+              {% endif %}
+              <button class="btn sm red" onclick="adminDel('{{ s.user }}','{{ s.server }}')"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div class="empty">Koi server nahi.</div>
+    {% endif %}
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+function toast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+async function toggleUser(u){
+  const r = await fetch(`/admin/toggle_user/${u}`, {method:'POST'});
+  const d = await r.json();
+  if (d.success) { toast(d.active ? 'User activated' : 'User blocked'); setTimeout(()=>location.reload(),600); }
+  else toast(d.error || 'Failed', 'error');
+}
+
+async function resetPw(u){
+  const p = prompt(`New password for ${u} (min 4 chars):`);
+  if (!p || p.length < 4) return;
+  const r = await fetch(`/admin/reset_password/${u}`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({password:p})
+  });
+  const d = await r.json();
+  toast(d.success ? 'Password reset' : (d.error||'Failed'), d.success?'success':'error');
+}
+
+async function setLimit(u){
+  const l = prompt(`Server limit for ${u} (-1 = unlimited):`, '5');
+  if (l === null) return;
+  const r = await fetch(`/admin/set_limit/${u}`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({limit: parseInt(l) || 5})
+  });
+  const d = await r.json();
+  toast(d.success ? 'Limit updated' : (d.error||'Failed'), d.success?'success':'error');
+}
+
+async function delUser(u){
+  if (!confirm(`Delete user "${u}"? Saare servers bhi delete honge.`)) return;
+  const r = await fetch(`/admin/delete_user/${u}`, {method:'POST'});
+  const d = await r.json();
+  if (d.success) { toast('User deleted'); setTimeout(()=>location.reload(),600); }
+  else toast(d.error || 'Failed', 'error');
+}
+
+async function viewServers(u){
+  const r = await fetch(`/admin/user_servers/${u}`);
+  const servers = await r.json();
+  if (!servers.length) return alert(`${u} ke paas koi server nahi.`);
+  alert(`${u} ke servers:\n\n` + servers.map(s => `${s.server} — ${s.running ? 'RUNNING' : 'stopped'}`).join('\n'));
+}
+
+async function adminStart(u, s){
+  const r = await fetch(`/admin/start_server/${u}/${s}`, {method:'POST'});
+  const d = await r.json();
+  toast(d.message || (d.success?'Started':'Failed'), d.success?'success':'error');
+  if (d.success) setTimeout(()=>location.reload(),600);
+}
+async function adminStop(u, s){
+  const r = await fetch(`/admin/stop_server/${u}/${s}`, {method:'POST'});
+  const d = await r.json();
+  toast(d.message || (d.success?'Stopped':'Failed'), d.success?'success':'error');
+  if (d.success) setTimeout(()=>location.reload(),600);
+}
+async function adminDel(u, s){
+  if (!confirm(`Delete ${u}/${s}?`)) return;
+  const r = await fetch(`/admin/delete_server/${u}/${s}`, {method:'POST'});
+  const d = await r.json();
+  if (d.success) { toast('Deleted'); setTimeout(()=>location.reload(),600); }
+  else toast(d.error || 'Failed', 'error');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — MASTER HOSTING</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Cinzel:wght@700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter,system-ui,sans-serif;
+  background:#0a0a0f;color:#fff8e7;
+  min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(251,191,36,.14),transparent 60%),#0a0a0f;
+}
+.box{
+  width:100%;max-width:420px;
+  padding:40px 32px 28px;
+  border-radius:24px;
+  background:linear-gradient(160deg,rgba(35,28,15,.85),rgba(15,12,6,.92));
+  border:1px solid rgba(251,191,36,.3);
+  box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(251,191,36,.15);
+  text-align:center;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;background:rgba(251,191,36,.12);
+  color:#fbbf24;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:2px;
+  margin-bottom:22px;border:1px solid rgba(251,191,36,.55);
+}
+.logo{
+  font-family:Cinzel,serif;font-size:36px;font-weight:900;line-height:1.05;
+  background:linear-gradient(135deg,#fff8e7,#fcd34d 40%,#d97706);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+}
+.logo span{
+  display:block;font-size:20px;letter-spacing:6px;
+  font-family:Orbitron,sans-serif;font-weight:700;
+  background:linear-gradient(135deg,#fbbf24,#b45309);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-top:4px;
+}
+.sub{color:#c4a86b;font-size:13px;margin:12px 0 26px}
+.grp{position:relative;margin-bottom:14px}
+.grp i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#d97706;font-size:15px}
+.grp input{
+  width:100%;padding:15px 18px 15px 46px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(251,191,36,.25);
+  border-radius:12px;color:#fff8e7;
+  font-size:15px;font-weight:500;font-family:inherit;transition:.3s;
+}
+.grp input::placeholder{color:#786740}
+.grp input:focus{
+  outline:none;border-color:#fbbf24;background:rgba(0,0,0,.5);
+  box-shadow:0 0 0 3px rgba(251,191,36,.15),0 0 25px rgba(251,191,36,.25);
+}
+.btn{
+  width:100%;padding:15px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#fcd34d,#fbbf24 50%,#d97706);
+  color:#1a1408;font-weight:800;font-size:15px;
+  letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 24px rgba(251,191,36,.25);
+  margin-top:8px;font-family:inherit;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(251,191,36,.4)}
+.alert{
+  padding:12px 16px;border-radius:10px;margin-bottom:18px;
+  font-size:13px;font-weight:600;
+  display:flex;align-items:center;gap:10px;
+  background:rgba(251,113,133,.12);color:#fb7185;
+  border-left:4px solid #fb7185;text-align:left;
+}
+.foot{
+  display:flex;justify-content:space-between;
+  margin-top:26px;padding-top:20px;
+  border-top:1px dashed rgba(251,191,36,.2);
+  font-size:10.5px;color:#786740;font-weight:600;
+}
+.foot i{color:#fbbf24}
+
+/* ============ CONTACT / ACCESS REQUEST ============ */
+.divider{
+  display:flex;align-items:center;gap:10px;
+  margin:24px 0 18px;
+  color:#786740;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:2px;
+}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(251,191,36,.25),transparent);
+}
+
+.contact-section{
+  text-align:center;
+  padding:16px 14px;
+  background:rgba(251,191,36,.05);
+  border:1px dashed rgba(251,191,36,.3);
+  border-radius:14px;
+}
+.contact-title{
+  font-size:12px;font-weight:800;color:#fbbf24;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:6px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.contact-title i{font-size:13px}
+.contact-desc{
+  font-size:11.5px;color:#c4a86b;
+  line-height:1.5;margin-bottom:12px;
+}
+.contact-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;
+  background:linear-gradient(135deg,rgba(34,158,217,.15),rgba(34,158,217,.08));
+  color:#229ED9;
+  border:1px solid rgba(34,158,217,.4);
+  border-radius:25px;
+  font-size:12.5px;font-weight:800;
+  text-decoration:none;
+  letter-spacing:0.5px;
+  transition:all .25s;
+}
+.contact-btn:hover{
+  background:#229ED9;color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(34,158,217,.35);
+}
+.contact-btn i{font-size:15px}
+.contact-handle{
+  display:block;
+  margin-top:10px;
+  font-family:'JetBrains Mono','Courier New',monospace;
+  font-size:12px;
+  color:#fbbf24;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+.credit{
+  margin-top:18px;font-size:10px;color:#786740;
+  letter-spacing:2px;text-transform:uppercase;
+}
+.credit b{color:#fbbf24;font-weight:800}
+
+@media (max-width:420px){
+  .box{padding:32px 22px 24px;border-radius:20px}
+  .logo{font-size:30px}
+  .logo span{font-size:18px;letter-spacing:5px}
+  .sub{font-size:12px;margin:10px 0 22px}
+  .grp input{padding:13px 16px 13px 42px;font-size:14px}
+  .foot{font-size:9.5px}
+  .contact-title{font-size:11px}
+  .contact-desc{font-size:11px}
+  .contact-btn{padding:9px 16px;font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="badge"><i class="fa-solid fa-crown"></i> PREMIUM PANEL</div>
+  <h1 class="logo">MASTER<span>HOSTING</span></h1>
+  <p class="sub"><i class="fa-solid fa-bolt"></i> Admin-created accounts only</p>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for c,m in msgs %}
+      <div class="alert"><i class="fa-solid fa-circle-exclamation"></i> {{ m }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="alert"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</div>
+  {% endif %}
+
+  <form method="POST">
+    <div class="grp">
+      <i class="fa-solid fa-user"></i>
+      <input type="text" name="username" placeholder="Username" required autofocus autocomplete="username">
+    </div>
+    <div class="grp">
+      <i class="fa-solid fa-lock"></i>
+      <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+    </div>
+    <button class="btn" type="submit">Login <i class="fa-solid fa-arrow-right"></i></button>
+  </form>
+
+  <div class="foot">
+    <span><i class="fa-solid fa-shield-halved"></i> Secure</span>
+    <span><i class="fa-solid fa-infinity"></i> Unlimited</span>
+  </div>
+
+  <!-- ============ CONTACT / ACCESS REQUEST ============ -->
+  <div class="divider">Need Access?</div>
+
+  <div class="contact-section">
+    <div class="contact-title">
+      <i class="fa-brands fa-telegram"></i>
+      Contact Owner
+    </div>
+    <p class="contact-desc">
+      For Free Hosting Access !
+    </p>
+    <a href="https://t.me/mas1er_official" target="_blank" rel="noopener" class="contact-btn">
+      <i class="fa-brands fa-telegram"></i>
+      Message on Telegram
+    </a>
+    <span class="contact-handle">@mas1er_official</span>
+  </div>
+
+  <div class="credit">
+    Powered by <b>MASTER OFFICIAL</b>
+  </div>
+</div>
+</body>
+</html>
